@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\API\CustomerController;
+use App\Http\Controllers\API\OrderController;
+use App\Http\Controllers\API\CategorieController;
+use App\Http\Controllers\API\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\CustomerController;
-use App\Http\Controllers\API\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +30,13 @@ Route::get('v1/product/{id}', [ProductController::class, 'show']);
 Route::post('v1/product', [ProductController::class, 'store']);
 Route::put('v1/product/{id}', [ProductController::class, 'update']);
 Route::delete('v1/product/{id}', [ProductController::class, 'destroy']);
+//tes relasi antar tabel
+Route::get('v1/producR', [ProductController::class, 'indexRelasi']);
+// untuk tabel Categories tanpa penggunaan resource
+Route::get('v1/categorie', [CategorieController::class, 'index']);
+Route::get('v1/categorie/{id}', [CategorieController::class, 'show']);
+Route::post('v1/categorie', [CategorieController::class, 'store']);
+Route::put('v1/categorie/{id}', [CategorieController::class, 'update']);
+Route::delete('v1/categorie/{id}', [CategorieController::class, 'destroy']);
+//tes relasi antar tabel
+Route::get('v1/categoriR', [CategorieController::class, 'indexRelasi']); 

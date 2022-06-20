@@ -12,4 +12,9 @@ class Product extends Model
     protected $primaryKey = 'id';
     protected $fillable = ['id', 'name', 'description', 'price', 'category_id'];
 
+    // relasi table dari product dengan category_id(foreign_key)
+    public function category()
+    {
+        return $this->belongsTo(Categorie::class, 'category_id');
+    }
 }

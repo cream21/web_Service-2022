@@ -4,15 +4,15 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Support\Facades\Validator;
 
-class ProductController extends Controller
+class OrderController extends Controller
 {
     // tampil
     public function index()
     {
-        $datas = Product::all();
+        $datas = Order::all();
         return response()->json([
             'pesan' => 'Data Berhasil Ditemukan',
             'data' => $datas
@@ -21,7 +21,7 @@ class ProductController extends Controller
     // tampil berdasarkan id
     public function show($id)
     {
-        $data = Product::find($id);
+        $data = Order::find($id);
         if (empty($data)) {
             return response()->json(['pesan' => 'Data Tidak ditemukan', 'data' => ''], 404);
         }
@@ -31,53 +31,51 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $validasi = Validator::make($request->all(), [
-            'id' => 'required|numeric|unique:products',
-            'name' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'category_id' => 'required|numeric'
+            'id' => 'required|numeric|unique:orders',
+            'customer_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+            'status' => 'required',
         ]);
         if ($validasi->fails()) {
             return response()->json(['pesan' => 'data gagal ditambahkan', 'data' => $validasi->errors()->all()], 404);
         }
-        $data = Product::create($request->all());
+        $data = Order::create($request->all());
         return response()->json(['pesan' => 'data berhasil ditambahkan', 'data' => $data], 200);
     }
     // update
     public function update(Request $request, $id)
     {
-        $products = Product::find($id);
-        if (empty($products)) {
+        $orders = Order::find($id);
+        if (empty($orders)) {
             return response()->json(['pesan' => 'data tidak ditemukan', 'data' => ''], 404);
         } else {
             $validasi = Validator::make($request->all(), [
-                'id' => 'required|numeric|unique:products',
-                'name' => 'required',
-                'description' => 'required',
-                'price' => 'required|numeric',
-                'category_id' => 'required|numeric'
+                'id' => 'required|numeric|unique:orders',
+                'customer_id' => 'required|numeric',
+                'product_id' => 'required|numeric',
+                'status' => 'required',
             ]);
             if ($validasi->fails()) {
                 return response()->json(['pesan' => 'Data Gagal diUpdate', 'data' => $validasi->errors()->all()], 404);
             }
-            $products->update($request->all());
-            return response()->json(['pesan' => 'Data Berhasil disimpan', 'data' => $products], 200);
+            $orders->update($request->all());
+            return response()->json(['pesan' => 'Data Berhasil disimpan', 'data' => $orders], 200);
         }
     }
     // Hapus
     public function destroy($id)
     {
-        $products = Product::find($id);
-        if (empty($products)) {
+        $orderes = Order::find($id);
+        if (empty($orderes)) {
             return response()->json(['pesan' => 'Data Tidak ditemukan', 'data' => ''], 404);
         }
-        $products->delete();
-        return response()->json(['pesan' => 'Data Berhasil dihapus', 'data' => $products]);
+        $orderes->delete();
+        return response()->json(['pesan' => 'Data Berhasil dihapus', 'data' => $orderes]);
     }
     // tes relasi
     public function indexRelasi()
     {
-        $products = Product::with('category')->get();
-        return response()->json(['pesan' => 'Data Berhasil ditemukan', 'data' => $products], 200);
+        $order = Order::with('customer','product')->get();
+        return response()->json(['pesan' => 'Data Berhasil ditemukan', 'data' => $order], 200);
     }
 }
